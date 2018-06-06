@@ -442,7 +442,7 @@ curl -s -X GET -u demo-app:demo-app_pass http://config-server.local:8888/config/
 
 <div>
 <div>
-<pre class="source">ssh-keygen -t rsa -b 2048 -f src/main/resources/production-deploy_key -q -N &quot;&quot; -C &quot;config-server@your_domain&quot;
+<pre class="source">ssh-keygen -t rsa -b 2048 -f production-deploy_key -q -N &quot;&quot; -C &quot;config-server@your_domain&quot;
 </pre></div></div>
 
 <ol style="list-style-type: decimal">
@@ -507,7 +507,7 @@ keytool -genkeypair \
 -keystore production-keystore.jks
 </pre></div></div>
 
-<p>Change the value of option <tt>alias</tt> and <tt>keypass</tt> then run <tt>keytool</tt> again can generate multiple key pairs.<br />
+<p>Change the value of option <tt>alias</tt> and <tt>keypass</tt> then run <tt>keytool</tt> again can create and save multiple key pairs into same jks file.<br />
 To list key pairs in jks file, run <tt>keytool -list -storepass ${ENCRYPT_KEYSTORE_PASSWORD} -keystore production-keystore.jks</tt>.</p></div>
 <div class="section">
 <h2><a name="Appendix"></a>Appendix</h2>
