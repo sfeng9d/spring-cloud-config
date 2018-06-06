@@ -16,12 +16,11 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @Configuration
 <span class="nc" id="L17">public class GitParentSupportConfiguration {</span>
 
+  @Autowired
+  private ConfigSecurity configSecurity;
 
   @Autowired
   private ConfigurableEnvironment environment;
-
-  @Autowired
-  private ConfigSecurity configSecurity;
 
   @Value(&quot;${spring.cloud.config.server.git.timeout:30}&quot;)
   private Integer timeout;
@@ -29,16 +28,16 @@ import org.springframework.core.env.ConfigurableEnvironment;
   @Bean
   @ConditionalOnMissingBean(EnvironmentRepository.class)
   public EnvironmentRepository environmentRepository() {
-<span class="nc" id="L32">    final GitParentSupportMultipleJGitEnvironmentRepository repository =</span>
+<span class="nc" id="L31">    final GitParentSupportMultipleJGitEnvironmentRepository repository =</span>
         new GitParentSupportMultipleJGitEnvironmentRepository(this.environment);
 
-<span class="nc" id="L35">    repository.setConfigSecurity(this.configSecurity);</span>
+<span class="nc" id="L34">    repository.setConfigSecurity(this.configSecurity);</span>
 
-<span class="nc bnc" id="L37" title="All 2 branches missed.">    if (this.timeout != null) {</span>
-<span class="nc" id="L38">      repository.setTimeout(this.timeout);</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">    if (this.timeout != null) {</span>
+<span class="nc" id="L37">      repository.setTimeout(this.timeout);</span>
     }
 
-<span class="nc" id="L41">    return repository;</span>
+<span class="nc" id="L40">    return repository;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

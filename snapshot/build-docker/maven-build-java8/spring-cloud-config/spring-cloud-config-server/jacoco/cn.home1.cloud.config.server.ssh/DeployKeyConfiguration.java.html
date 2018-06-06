@@ -3,20 +3,26 @@
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.cloud.config.server.bootstrap.ConfigServerBootstrapConfiguration;
+import org.springframework.cloud.config.server.config.TransportConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
+@AutoConfigureBefore({ConfigServerBootstrapConfiguration.class, TransportConfiguration.class})
 @Configuration
 @Order(HIGHEST_PRECEDENCE)
-<span class="nc" id="L12">public class DeployKeyConfiguration {</span>
+<span class="nc" id="L16">public class DeployKeyConfiguration {</span>
 
   @Value(&quot;${spring.cloud.config.server.git.deploy-key}&quot;)
   private String deployKeyPrivate;
 
   @Bean
   public DeployKey deployKey() {
-<span class="nc" id="L19">    return new DeployKey(this.deployKeyPrivate);</span>
+<span class="nc" id="L23">    final DeployKey deployKey = new DeployKey(this.deployKeyPrivate);</span>
+<span class="nc" id="L24">    deployKey.setUp(null);</span>
+<span class="nc" id="L25">    return deployKey;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>
