@@ -313,9 +313,9 @@ curl -s -X GET -u demo-app:demo-app_pass http://config-server.local:8888/config/
 </ul>
 <blockquote>
 
-<p><tt>spring.cloud.config.git.deploy-key.public: classpath:&lt;filename&gt; or file:&lt;filename&gt;</tt><br />
-<tt>spring.cloud.config.git.deploy-key.private: classpath:&lt;filename&gt; or file:&lt;filename&gt;</tt></p>
+<p><tt>spring.cloud.config.git.deploy-key: classpath:&lt;filename&gt; or file:&lt;filename&gt;</tt></p>
 </blockquote>
+<p>The property in application.yml specifies the private key, public key is privateKey + &#x201c;.pub&#x201d;.</p>
 <p>config-server&#x2019;s application.yml example:</p>
 
 <div>
@@ -323,9 +323,7 @@ curl -s -X GET -u demo-app:demo-app_pass http://config-server.local:8888/config/
 <pre class="source">spring.cloud:
   config:
       git:
-        deploy-key: # custom property
-          private: ${SPRING_CLOUD_CONFIG_SERVER_DEPLOYKEY_PRIVATE:classpath:default-deploy_key}
-          public: ${SPRING_CLOUD_CONFIG_SERVER_DEPLOYKEY_PRIVATE:classpath:default-deploy_key}.pub
+        deploy-key: ${SPRING_CLOUD_CONFIG_SERVER_GIT_DEPLOYKEY:classpath:default-deploy_key}
 </pre></div></div>
 
 <ul>
