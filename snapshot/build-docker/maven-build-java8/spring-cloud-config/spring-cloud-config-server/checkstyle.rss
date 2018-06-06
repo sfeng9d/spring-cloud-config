@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 12,
              Errors: 0,
-             Warnings: 43,
+             Warnings: 45,
              Infos: 0
       </title>
             <link>https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html</link>
@@ -158,6 +158,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.ssh.DeployKey.java">cn/home1/cloud/config/server/ssh/DeployKey.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.util.ResourceUtils.java">cn/home1/cloud/config/server/util/ResourceUtils.java</a>
                 </td>
                 <td>
@@ -173,20 +187,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.security.ApplicationConfigSecurity.java">cn/home1/cloud/config/server/security/ApplicationConfigSecurity.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.ConfigServer.java">cn/home1/cloud/config/server/ConfigServer.java</a>
                 </td>
                 <td>
                   0

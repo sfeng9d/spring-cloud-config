@@ -1,4 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./CustomJschConfigSessionFactory.html" title="cn.home1.cloud.config.server.ssh.CustomJschConfigSessionFactory" alt="" coords="16,11,413,123"/>
-<area shape="rect" id="node1" href="./CustomJschConfigSessionFactory.html" title="&lt;TABLE&gt;" alt="" coords="5,5,424,128"/>
+<area shape="rect" id="node1_0" href="./CustomJschConfigSessionFactory.html" title="cn.home1.cloud.config.server.ssh.CustomJschConfigSessionFactory" alt="" coords="16,37,413,149"/>
+<area shape="rect" id="node1" href="./CustomJschConfigSessionFactory.html" title="&lt;TABLE&gt;" alt="" coords="5,32,424,155"/>
+<area shape="rect" id="node2_1" href="./DeployKey.html" title="cn.home1.cloud.config.server.ssh.DeployKey" alt="" coords="459,11,720,175"/>
+<area shape="rect" id="node2" href="./DeployKey.html" title="&lt;TABLE&gt;" alt="" coords="448,6,731,181"/>
+<area shape="rect" id="node3_2" href="./DeployKeyConfiguration.html" title="cn.home1.cloud.config.server.ssh.DeployKeyConfiguration" alt="" coords="765,46,947,141"/>
+<area shape="rect" id="node3" href="./DeployKeyConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="755,41,957,146"/>
 </map>

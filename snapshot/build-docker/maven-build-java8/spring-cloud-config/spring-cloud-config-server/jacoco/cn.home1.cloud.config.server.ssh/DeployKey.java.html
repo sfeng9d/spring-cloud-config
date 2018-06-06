@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DeployKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-cloud-config-server</a> &gt; <a href="index.source.html" class="el_package">cn.home1.cloud.config.server.ssh</a> &gt; <span class="el_source">DeployKey.java</span></div><h1>DeployKey.java</h1><pre class="source lang-java linenums">package cn.home1.cloud.config.server.ssh;
+
+import static org.springframework.util.FileCopyUtils.copyToString;
+
+import cn.home1.cloud.config.server.util.Consts;
+import cn.home1.cloud.config.server.util.ResourceUtils;
+
+import lombok.SneakyThrows;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.config.server.ssh.SshUriProperties;
+
+import java.io.File;
+import java.io.FileReader;
+
+import javax.annotation.PostConstruct;
+
+public class DeployKey {
+
+  private final String privateKeyLocation;
+
+  @Autowired
+  private SshUriProperties sshUriProperties;
+
+<span class="nc" id="L25">  public DeployKey(final String privateKeyLocation) {</span>
+<span class="nc" id="L26">    this.privateKeyLocation = privateKeyLocation;</span>
+<span class="nc" id="L27">  }</span>
+
+
+  @PostConstruct
+  public void init() {
+<span class="nc" id="L32">    final String privateKey = this.getPrivateKey();</span>
+
+    // setup deploy key
+    //SshSessionFactory.setInstance(new CustomJschConfigSessionFactory(file));
+<span class="nc" id="L36">    this.sshUriProperties.setPrivateKey(privateKey);</span>
+<span class="nc" id="L37">    this.sshUriProperties.setIgnoreLocalSshSettings(true);</span>
+<span class="nc" id="L38">  }</span>
+
+  public String getPrivateKeyPath() {
+<span class="nc" id="L41">    return ResourceUtils.findResourceFile(this.privateKeyLocation, Consts.DATA_DIRECTORY);</span>
+  }
+
+<span class="nc" id="L44">  @SneakyThrows</span>
+  public String getPrivateKey() {
+<span class="nc" id="L46">    return copyToString(new FileReader(new File(this.getPrivateKeyPath())));</span>
+  }
+
+  public String getPublicKeyPath() {
+<span class="nc" id="L50">    return this.getPrivateKeyPath() + &quot;.pub&quot;;</span>
+  }
+
+<span class="nc" id="L53">  @SneakyThrows</span>
+  public String getPublicKey() {
+<span class="nc" id="L55">    return copyToString(new FileReader(new File(this.getPublicKeyPath())));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConfigServer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-cloud-config-server</a> &gt; <a href="index.source.html" class="el_package">cn.home1.cloud.config.server</a> &gt; <span class="el_source">ConfigServer.java</span></div><h1>ConfigServer.java</h1><pre class="source lang-java linenums">package cn.home1.cloud.config.server;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-import static org.springframework.util.FileCopyUtils.copyToString;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import cn.home1.cloud.config.server.security.ConfigSecurity;
-import cn.home1.cloud.config.server.ssh.CustomJschConfigSessionFactory;
-import cn.home1.cloud.config.server.util.ResourceUtils;
+import cn.home1.cloud.config.server.ssh.DeployKey;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import org.eclipse.jgit.transport.SshSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,49 +22,53 @@ import org.springframework.cloud.config.server.config.ConfigServerHealthIndicato
 import org.springframework.cloud.config.server.environment.EnvironmentRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.io.FileReader;
-
 @RestController
 @SpringBootApplication
-<span class="nc" id="L42">@Slf4j</span>
-<span class="nc" id="L43">public class ConfigServer {</span>
+<span class="nc" id="L33">@Slf4j</span>
+<span class="nc" id="L34">public class ConfigServer {</span>
 
   static {
-<span class="nc" id="L46">    final String profilesFromEnv = System.getenv().get(&quot;SPRING_PROFILES_ACTIVE&quot;);</span>
-<span class="nc" id="L47">    final String profilesFromProperty = System.getProperty(&quot;spring.profiles.active&quot;, &quot;&quot;);</span>
-<span class="nc bnc" id="L48" title="All 4 branches missed.">    if (isBlank(profilesFromEnv) &amp;&amp; isBlank(profilesFromProperty)) {</span>
-<span class="nc" id="L49">      System.setProperty(&quot;spring.profiles.active&quot;, &quot;port_nonsecure&quot;);</span>
+<span class="nc" id="L37">    final String profilesFromEnv = System.getenv().get(&quot;SPRING_PROFILES_ACTIVE&quot;);</span>
+<span class="nc" id="L38">    final String profilesFromProperty = System.getProperty(&quot;spring.profiles.active&quot;, &quot;&quot;);</span>
+<span class="nc bnc" id="L39" title="All 4 branches missed.">    if (isBlank(profilesFromEnv) &amp;&amp; isBlank(profilesFromProperty)) {</span>
+<span class="nc" id="L40">      System.setProperty(&quot;spring.profiles.active&quot;, &quot;port_nonsecure&quot;);</span>
     }
-  }
+<span class="nc" id="L42">  }</span>
 
   @Configuration
   @EnableAutoConfiguration
   @EnableConfigServer
   //@EnableEurekaClient
   @EnableDiscoveryClient
-<span class="nc" id="L58">  protected class ConfigServerConfiguration {</span>
+<span class="nc" id="L49">  protected class ConfigServerConfiguration {</span>
 
     @Bean
     public ConfigSecurity configSecurity() {
-<span class="nc" id="L62">      return new ConfigSecurity();</span>
+<span class="nc" id="L53">      return new ConfigSecurity();</span>
     }
   }
 
-<span class="nc" id="L66">  private static final String DATA_DIRECTORY = System.getProperty(&quot;user.home&quot;) + &quot;/.data/config-server&quot;;</span>
+  @Configuration
+<span class="nc" id="L58">  public static class HealthIndicatorConfiguration {</span>
+
+    @Bean
+    @ConditionalOnProperty(value = &quot;spring.cloud.config.server.health.enabled&quot;, matchIfMissing = true)
+    public ConfigServerHealthIndicator configServerHealthIndicator(final EnvironmentRepository repository) {
+<span class="nc" id="L63">      return new ConfigServerHealthIndicator(repository);</span>
+    }
+  }
+
+  @Autowired
+  private DeployKey deployKey;
 
   @Autowired
   private Environment environment;
-
-  @Value(&quot;${spring.cloud.config.server.git.deploy-key.public}&quot;)
-  private String deployKeyPublic;
 
   @Autowired
   private ConfigSecurity configSecurity;
@@ -77,18 +76,16 @@ import java.io.FileReader;
   @ResponseBody
   @RequestMapping(path = {&quot;/&quot;, &quot;${spring.cloud.config.server.prefix:}/&quot;}, method = GET)
   public String index() {
-<span class="nc" id="L80">    return &quot;Visit https://github.com/cloud-ready/spring-cloud-config-server for more info.&quot;;</span>
+<span class="nc" id="L79">    return &quot;Visit https://github.com/cloud-ready/spring-cloud-config-server for more info.&quot;;</span>
   }
 
-<span class="nc" id="L83">  @SneakyThrows</span>
   @ResponseBody
   @RequestMapping(path = &quot;${spring.cloud.config.server.prefix:}/deployKeyPublic&quot;, method = GET)
   public String getDeployKeyPublic() {
-<span class="nc" id="L87">    final String path = ResourceUtils.findResourceFile(this.deployKeyPublic, ConfigServer.DATA_DIRECTORY);</span>
-<span class="nc" id="L88">    return copyToString(new FileReader(new File(path)));</span>
+<span class="nc" id="L85">    return this.deployKey.getPublicKey();</span>
   }
 
-<span class="nc" id="L91">  @SneakyThrows</span>
+<span class="nc" id="L88">  @SneakyThrows</span>
   @ResponseBody
   @RequestMapping(path = &quot;${spring.cloud.config.server.prefix:}/encryptParentPassword&quot;, method = POST,
       consumes = APPLICATION_FORM_URLENCODED_VALUE)
@@ -97,32 +94,11 @@ import java.io.FileReader;
       @RequestParam(&quot;parentApplication&quot;) final String parentApplication,
       @RequestParam(&quot;parentPassword&quot;) final String parentPassword
   ) {
-<span class="nc" id="L100">    return this.configSecurity.encryptParentPassword(application, parentApplication, parentPassword);</span>
-  }
-
-  @Configuration
-<span class="nc" id="L104">  public static class HealthIndicatorConfiguration {</span>
-
-    @Bean
-    @ConditionalOnProperty(value = &quot;spring.cloud.config.server.health.enabled&quot;, matchIfMissing = true)
-    public ConfigServerHealthIndicator configServerHealthIndicator(final EnvironmentRepository repository) {
-<span class="nc" id="L109">      return new ConfigServerHealthIndicator(repository);</span>
-    }
-  }
-
-  @Configuration
-  @Order(HIGHEST_PRECEDENCE)
-<span class="nc" id="L115">  public static class DeployKeyConfiguration {</span>
-
-    @Value(&quot;${spring.cloud.config.server.git.deploy-key.private}&quot;)
-    public void setDeployKeyPrivate(final String location) {
-<span class="nc" id="L119">      final String path = ResourceUtils.findResourceFile(location, ConfigServer.DATA_DIRECTORY);</span>
-<span class="nc" id="L120">      SshSessionFactory.setInstance(new CustomJschConfigSessionFactory(path));</span>
-<span class="nc" id="L121">    }</span>
+<span class="nc" id="L97">    return this.configSecurity.encryptParentPassword(application, parentApplication, parentPassword);</span>
   }
 
   public static void main(final String... args) {
-<span class="nc" id="L125">    SpringApplication.run(ConfigServer.class, args);</span>
-<span class="nc" id="L126">  }</span>
+<span class="nc" id="L101">    SpringApplication.run(ConfigServer.class, args);</span>
+<span class="nc" id="L102">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>
