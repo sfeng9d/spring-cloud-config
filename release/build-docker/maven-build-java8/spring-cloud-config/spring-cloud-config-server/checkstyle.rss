@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 13,
              Errors: 0,
-             Warnings: 46,
+             Warnings: 49,
              Infos: 0
       </title>
             <link>https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html</link>
@@ -158,20 +158,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.ssh.DeployKeyConfiguration.java">cn/home1/cloud/config/server/ssh/DeployKeyConfiguration.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.environment.GitParentSupportConfiguration.java">cn/home1/cloud/config/server/environment/GitParentSupportConfiguration.java</a>
                 </td>
                 <td>
@@ -207,6 +193,20 @@ under the License.
                 </td>
                 <td>
                   2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.ConfigServer.java">cn/home1/cloud/config/server/ConfigServer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
                 <td>
                   0
