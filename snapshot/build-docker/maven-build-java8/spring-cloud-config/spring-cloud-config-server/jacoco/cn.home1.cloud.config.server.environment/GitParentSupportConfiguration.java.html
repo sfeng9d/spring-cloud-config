@@ -20,8 +20,20 @@ import org.springframework.core.env.ConfigurableEnvironment;
   @Autowired
   private ConfigSecurity configSecurity;
 
+  @Value(&quot;${spring.cloud.config.server.default-label:master}&quot;)
+  private String defaultLabel;
+
+  @Value(&quot;${spring.cloud.config.server.git.delete-untracked-branches:true}&quot;)
+  private Boolean deleteUntrackedBranches;
+
   @Autowired
   private ConfigurableEnvironment environment;
+
+  @Value(&quot;${spring.cloud.config.server.git.force-pull:true}&quot;)
+  private Boolean forcePull;
+
+  @Value(&quot;${spring.cloud.config.server.git.strict-host-key-checking:false}&quot;)
+  private Boolean strictHostKeyChecking;
 
   @Value(&quot;${spring.cloud.config.server.git.timeout:30}&quot;)
   private Integer timeout;
@@ -32,18 +44,20 @@ import org.springframework.core.env.ConfigurableEnvironment;
   @Bean
   @ConditionalOnMissingBean(EnvironmentRepository.class)
   public EnvironmentRepository environmentRepository() {
-<span class="nc" id="L35">    final GitParentSupportMultipleJGitEnvironmentRepository repository =</span>
+<span class="nc" id="L47">    final GitParentSupportMultipleJGitEnvironmentRepository repository =</span>
         new GitParentSupportMultipleJGitEnvironmentRepository(this.environment);
 
-<span class="nc" id="L38">    repository.setConfigSecurity(this.configSecurity);</span>
+<span class="nc" id="L50">    repository.setConfigSecurity(this.configSecurity);</span>
 
-<span class="nc bnc" id="L40" title="All 2 branches missed.">    if (this.timeout != null) {</span>
-<span class="nc" id="L41">      repository.setTimeout(this.timeout);</span>
-    }
+<span class="nc" id="L52">    repository.setDefaultLabel(this.defaultLabel);</span>
+<span class="nc" id="L53">    repository.setDeleteUntrackedBranches(this.deleteUntrackedBranches);</span>
+<span class="nc" id="L54">    repository.setForcePull(this.forcePull);</span>
+<span class="nc" id="L55">    repository.setStrictHostKeyChecking(this.strictHostKeyChecking);</span>
+<span class="nc" id="L56">    repository.setTimeout(this.timeout);</span>
 
-<span class="nc" id="L44">    repository.setTransportConfigCallback(this.transportConfigCallback);</span>
+<span class="nc" id="L58">    repository.setTransportConfigCallback(this.transportConfigCallback);</span>
 
-<span class="nc" id="L46">    return repository;</span>
+<span class="nc" id="L60">    return repository;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>
