@@ -23,11 +23,11 @@ import org.springframework.core.env.ConfigurableEnvironment;
   @Autowired
   private ConfigurableEnvironment environment;
 
-  @Autowired(required = false)
-  private TransportConfigCallback transportConfigCallback;
-
   @Value(&quot;${spring.cloud.config.server.git.timeout:30}&quot;)
   private Integer timeout;
+
+  @Autowired(required = false)
+  private TransportConfigCallback transportConfigCallback;
 
   @Bean
   @ConditionalOnMissingBean(EnvironmentRepository.class)
