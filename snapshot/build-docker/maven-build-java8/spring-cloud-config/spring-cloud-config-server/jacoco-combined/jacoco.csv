@@ -4,9 +4,9 @@ Combined,cn.home1.cloud.config.server,ConfigServer,111,0,14,0,28,0,13,0,6,0
 Combined,cn.home1.cloud.config.server,ConfigServer.HealthIndicatorConfiguration,8,0,0,0,2,0,2,0,2,0
 Combined,cn.home1.cloud.config.server.util,Consts,11,0,0,0,1,0,1,0,1,0
 Combined,cn.home1.cloud.config.server.util,ResourceUtils,109,0,12,0,15,0,7,0,1,0
-Combined,cn.home1.cloud.config.server.util,EnvironmentUtils,148,0,24,0,35,0,22,0,10,0
+Combined,cn.home1.cloud.config.server.util,EnvironmentUtils,163,0,28,0,37,0,25,0,11,0
 Combined,cn.home1.cloud.config.server.security,ConfigSecurity,21,296,5,25,3,64,4,23,1,11
-Combined,cn.home1.cloud.config.server.security,GitFileConfigUserDetailsService,161,0,10,0,31,0,11,0,6,0
+Combined,cn.home1.cloud.config.server.security,GitFileConfigUserDetailsService,194,0,16,0,39,0,14,0,6,0
 Combined,cn.home1.cloud.config.server.security,Role,34,0,0,0,4,0,1,0,1,0
 Combined,cn.home1.cloud.config.server.security,WebSecurityConfiguration,317,0,0,0,27,0,7,0,7,0
 Combined,cn.home1.cloud.config.server.security,ConfigServerSecurityProperties,66,0,4,0,14,0,13,0,11,0

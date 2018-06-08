@@ -261,7 +261,7 @@ curl -s -X GET [-u user:password] http[s]://host[:port][/server.context-path][/m
 <p>Note: + It is recommended to use a encrypted <tt>spring.cloud.config.parent.password</tt> in config file. + Do not use a plain text parent password or password encrypted by  <tt>/encrypt</tt> endpoint.</p>
 <blockquote>
 
-<p>Anyone who copied it will get privilege to access parent config repository. + Use <tt>/encryptParentPassword</tt> to generate a encrypted and signed parent password (token), only admin can do this.</p>
+<p>Anyone who copied it will get privilege to access parent config repository. + You can use different <tt>spring.cloud.config.parent.password</tt> in label-develop, profile-staging, profile-production configs to protect sensible properties. If you put password in different environment profiles, you need to provide the application (user) name and environment profile name (where the password stored), join them with a &#x2018;@&#x2019; as username. i.e. curl -X GET -u <a class="externalLink" href="mailto:application@staging.env">application@staging.env</a> <a class="externalLink" href="http://config-server.local:8888/config/application/staging.env">http://config-server.local:8888/config/application/staging.env</a> + Use <tt>/encryptParentPassword</tt> to generate a encrypted and signed parent password (token), only admin can do this.</p>
 
 <div>
 <div>
@@ -299,7 +299,11 @@ curl -s -X GET -u demo-app:demo-app_pass http://config-server.local:8888/config/
 
 <p>Users can specify a <tt>spring.cloud.config.password: &lt;password&gt;</tt> in config file to protect their config file url endpoints.</p>
 </blockquote>
-<p>Note: + config-server load <tt>spring.cloud.config.password</tt> with out profile, so do not define it under any custom profile. + config-server will use parent&#x2019;s <tt>spring.cloud.config.password</tt> if child&#x2019;s <tt>spring.cloud.config.password</tt> absent and it has a parent. + It is recommended to use a encrypted <tt>spring.cloud.config.password</tt> in config file.</p>
+<p>Note: + config-server support load <tt>spring.cloud.config.password</tt> form environment profiles or default profile. + You can use different <tt>spring.cloud.config.password</tt> in label-develop, profile-staging, profile-production configs to protect sensible properties.</p>
+<blockquote>
+
+<p>If you put password in different environment profiles, you need to provide the application (user) name and environment profile name (where the password stored), join them with a &#x2018;@&#x2019; as username. i.e. curl -X GET -u <a class="externalLink" href="mailto:application@staging.env">application@staging.env</a> <a class="externalLink" href="http://config-server.local:8888/config/application/staging.env">http://config-server.local:8888/config/application/staging.env</a> + config-server will use parent&#x2019;s <tt>spring.cloud.config.password</tt> if child&#x2019;s <tt>spring.cloud.config.password</tt> absent and it has a parent. + It is recommended to use a encrypted <tt>spring.cloud.config.password</tt> in config file.</p>
+</blockquote>
 <p>user&#x2019;s application.yml example</p>
 
 <div>

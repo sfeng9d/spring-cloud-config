@@ -20,70 +20,86 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.regex.Pattern;
 
 /**
  * config-server-client use the password configured in GIT. the user name must be the app name.
  */
-<span class="nc" id="L27">@Slf4j</span>
-<span class="nc" id="L28">public class GitFileConfigUserDetailsService implements UserDetailsService {</span>
+<span class="nc" id="L29">@Slf4j</span>
+<span class="nc" id="L30">public class GitFileConfigUserDetailsService implements UserDetailsService {</span>
 
-<span class="nc" id="L30">  private static final Collection&lt;? extends GrantedAuthority&gt; ANONYMOUS_AUTHORITY = ImmutableList.of();</span>
+<span class="nc" id="L32">  private static final Pattern PATTERN_AT = Pattern.compile(&quot;@&quot;);</span>
 
-<span class="nc" id="L32">  private static final Collection&lt;? extends GrantedAuthority&gt; ADMIN_AUTHORITY =</span>
-<span class="nc" id="L33">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.ADMIN.toString()));</span>
+<span class="nc" id="L34">  private static final Collection&lt;? extends GrantedAuthority&gt; ANONYMOUS_AUTHORITY = ImmutableList.of();</span>
 
-<span class="nc" id="L35">  private static final Collection&lt;? extends GrantedAuthority&gt; HOOK_AUTHORITY =</span>
-<span class="nc" id="L36">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.HOOK.toString()));</span>
+<span class="nc" id="L36">  private static final Collection&lt;? extends GrantedAuthority&gt; ADMIN_AUTHORITY =</span>
+<span class="nc" id="L37">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.ADMIN.toString()));</span>
 
-<span class="nc" id="L38">  private static final Collection&lt;? extends GrantedAuthority&gt; USER_AUTHORITY =</span>
-<span class="nc" id="L39">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.USER.toString()));</span>
+<span class="nc" id="L39">  private static final Collection&lt;? extends GrantedAuthority&gt; HOOK_AUTHORITY =</span>
+<span class="nc" id="L40">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.HOOK.toString()));</span>
 
-<span class="nc" id="L41">  @Setter</span>
+<span class="nc" id="L42">  private static final Collection&lt;? extends GrantedAuthority&gt; USER_AUTHORITY =</span>
+<span class="nc" id="L43">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.USER.toString()));</span>
+
+<span class="nc" id="L45">  @Setter</span>
   private ConfigSecurity configSecurity;
 
-<span class="nc" id="L44">  @Setter</span>
+<span class="nc" id="L48">  @Setter</span>
   private EnvironmentController environmentController;
 
-<span class="nc" id="L47">  @Setter</span>
+<span class="nc" id="L51">  @Setter</span>
   private ConfigServerSecurityProperties configServerSecurityProperties;
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-<span class="nc bnc" id="L52" title="All 2 branches missed.">    if (username == null) {</span>
-<span class="nc" id="L53">      return new User(&quot;anonymous&quot;, &quot;&quot;, ANONYMOUS_AUTHORITY);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">    if (username == null) {</span>
+<span class="nc" id="L57">      return new User(&quot;anonymous&quot;, &quot;&quot;, ANONYMOUS_AUTHORITY);</span>
     }
 
-<span class="nc bnc" id="L56" title="All 2 branches missed.">    if (username.equals(this.configServerSecurityProperties.getAdminName())) {</span>
-<span class="nc" id="L57">      return new User(username, this.configServerSecurityProperties.getAdminPassword(), ADMIN_AUTHORITY);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">    if (username.equals(this.configServerSecurityProperties.getAdminName())) {</span>
+<span class="nc" id="L61">      return new User(username, this.configServerSecurityProperties.getAdminPassword(), ADMIN_AUTHORITY);</span>
     }
 
-<span class="nc bnc" id="L60" title="All 2 branches missed.">    if (username.equals(this.configServerSecurityProperties.getHookName())) {</span>
-<span class="nc" id="L61">      return new User(username, this.configServerSecurityProperties.getHookPassword(), HOOK_AUTHORITY);</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">    if (username.equals(this.configServerSecurityProperties.getHookName())) {</span>
+<span class="nc" id="L65">      return new User(username, this.configServerSecurityProperties.getHookPassword(), HOOK_AUTHORITY);</span>
     }
 
     // get environment without profile
     final Environment environment;
 
+    // username is `spring.application.name` or `spring.application.name@{profile.env}`
+    final String application;
+    final String profile;
+<span class="nc bnc" id="L74" title="All 6 branches missed.">    if (username.contains(&quot;@&quot;) &amp;&amp; username.endsWith(&quot;.env&quot;) || username.endsWith(&quot;@default&quot;)) {</span>
+<span class="nc" id="L75">      final Iterator&lt;String&gt; parts = PATTERN_AT.splitAsStream(username).iterator();</span>
+<span class="nc" id="L76">      application = parts.next();</span>
+<span class="nc" id="L77">      profile = parts.next();</span>
+<span class="nc" id="L78">    } else {</span>
+<span class="nc" id="L79">      application = username;</span>
+<span class="nc" id="L80">      profile = Consts.PROFILE_NOT_EXIST;</span>
+    }
+
     try {
-<span class="nc" id="L68">      environment = this.environmentController.defaultLabel(username, Consts.PROFILE_NOT_EXIST);</span>
-<span class="nc" id="L69">    } catch (final Exception exception) {</span>
-<span class="nc" id="L70">      log.warn(&quot;error on loadUserByUsername from git configuration file, application (user) name:{} &quot;, //</span>
+<span class="nc" id="L84">      environment = this.environmentController.defaultLabel(application, profile);</span>
+<span class="nc" id="L85">    } catch (final Exception exception) {</span>
+<span class="nc" id="L86">      log.warn(&quot;error on loadUserByUsername from git configuration file, application (user) name:{} &quot;, //</span>
           username, exception);
-<span class="nc" id="L72">      throw exception;</span>
-<span class="nc" id="L73">    }</span>
+<span class="nc" id="L88">      throw exception;</span>
+<span class="nc" id="L89">    }</span>
 
-<span class="nc bnc" id="L75" title="All 2 branches missed.">    if (environment == null) {</span>
-<span class="nc" id="L76">      throw new UsernameNotFoundException(&quot;can not find the project with the name:&quot; + username);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">    if (environment == null) {</span>
+<span class="nc" id="L92">      throw new UsernameNotFoundException(&quot;can not find the project with the name:&quot; + username);</span>
     }
 
-<span class="nc" id="L79">    final String expectedPassword = getConfigPassword(environment);</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">    if (expectedPassword == null) {</span>
-<span class="nc" id="L81">      throw new BadCredentialsException(</span>
-<span class="nc" id="L82">          &quot;can not find the configPassword (spring.cloud.config.configPassword) from environment:&quot; + environment.getName());</span>
+<span class="nc" id="L95">    final String expectedPassword = getConfigPassword(environment);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">    if (expectedPassword == null) {</span>
+<span class="nc" id="L97">      throw new BadCredentialsException(</span>
+<span class="nc" id="L98">          &quot;can not find 'spring.cloud.config.password' from environment:&quot; + environment.getName());</span>
     }
-<span class="nc" id="L84">    final String rawExpectedPassword = this.configSecurity.decryptProperty(expectedPassword);</span>
+<span class="nc" id="L100">    final String rawExpectedPassword = this.configSecurity.decryptProperty(expectedPassword);</span>
 
-<span class="nc" id="L86">    return new User(username, rawExpectedPassword, USER_AUTHORITY);</span>
+<span class="nc" id="L102">    return new User(application, rawExpectedPassword, USER_AUTHORITY);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

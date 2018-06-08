@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 13,
              Errors: 0,
-             Warnings: 49,
+             Warnings: 50,
              Infos: 0
       </title>
             <link>https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html</link>
@@ -80,7 +80,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  4
                 </td>
                 <td>
                   0
