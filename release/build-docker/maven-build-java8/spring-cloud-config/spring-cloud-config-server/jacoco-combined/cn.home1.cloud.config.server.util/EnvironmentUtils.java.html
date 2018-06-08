@@ -86,5 +86,11 @@ public abstract class EnvironmentUtils {
 <span class="nc" id="L86">    final String evnPropertyValue = getEnvProperty(environment, &quot;spring.cloud.config.parent.label&quot;);</span>
 <span class="nc bnc" id="L87" title="All 4 branches missed.">    return evnPropertyValue != null &amp;&amp; label != null ? evnPropertyValue.replace(&quot;{label}&quot;, label) : label;</span>
   }
+
+  @Deprecated
+  public static String getParentProfile(final Environment environment, final String profile) {
+<span class="nc" id="L92">    final String evnPropertyValue = getEnvProperty(environment, &quot;spring.cloud.config.parent.profile&quot;);</span>
+<span class="nc bnc" id="L93" title="All 4 branches missed.">    return evnPropertyValue != null &amp;&amp; profile != null ? evnPropertyValue.replace(&quot;{profile}&quot;, profile) : profile;</span>
+  }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

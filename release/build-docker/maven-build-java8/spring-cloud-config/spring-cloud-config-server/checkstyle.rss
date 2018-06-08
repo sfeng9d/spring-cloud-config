@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 13,
              Errors: 0,
-             Warnings: 49,
+             Warnings: 54,
              Infos: 0
       </title>
             <link>https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html</link>
@@ -80,7 +80,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  6
                 </td>
                 <td>
                   0
@@ -130,7 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.security.ConfigServerSecurityProperties.java">cn/home1/cloud/config/server/security/ConfigServerSecurityProperties.java</a>
+                  <a href="https://github.com/cloud-ready/spring-cloud-config/spring-cloud-config-server/checkstyle.html#cn.home1.cloud.config.server.security.PrivilegedUserProperties.java">cn/home1/cloud/config/server/security/PrivilegedUserProperties.java</a>
                 </td>
                 <td>
                   0
@@ -192,7 +192,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  4
                 </td>
                 <td>
                   0

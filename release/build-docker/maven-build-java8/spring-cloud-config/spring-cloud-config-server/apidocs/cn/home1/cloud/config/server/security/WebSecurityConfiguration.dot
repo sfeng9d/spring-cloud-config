@@ -23,7 +23,7 @@ digraph G {
 <tr><td align="left" balign="left"> # configure(auth : AuthenticationManagerBuilder) </td></tr>
 <tr><td align="left" balign="left"> # configure(http : HttpSecurity) </td></tr>
 <tr><td align="left" balign="left"> + applicationConfigSecurity() : ApplicationConfigSecurity </td></tr>
-<tr><td align="left" balign="left"> + configServerSecurityProperties() : ConfigServerSecurityProperties </td></tr>
+<tr><td align="left" balign="left"> + privilegedUserProperties() : PrivilegedUserProperties </td></tr>
 <tr><td align="left" balign="left"> + userDetailsService() : GitFileConfigUserDetailsService </td></tr>
 		</table></td></tr>
 		</table>>, URL="./WebSecurityConfiguration.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];

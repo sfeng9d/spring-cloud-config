@@ -5,10 +5,10 @@
 <area shape="rect" id="node2" href="./GitFileConfigUserDetailsService.html" title="&lt;TABLE&gt;" alt="" coords="827,49,1202,154"/>
 <area shape="rect" id="node3_2" href="./Role.html" title="cn.home1.cloud.config.server.security.Role" alt="" coords="1237,37,1342,166"/>
 <area shape="rect" id="node3" href="./Role.html" title="&lt;TABLE&gt;" alt="" coords="1226,31,1353,171"/>
-<area shape="rect" id="node4_3" href="./ConfigServerSecurityProperties.html" title="cn.home1.cloud.config.server.security.ConfigServerSecurityProperties" alt="" coords="1388,63,1612,140"/>
-<area shape="rect" id="node4" href="./ConfigServerSecurityProperties.html" title="&lt;TABLE&gt;" alt="" coords="1377,57,1623,145"/>
-<area shape="rect" id="node5_4" href="./WebSecurityConfiguration.html" title="cn.home1.cloud.config.server.security.WebSecurityConfiguration" alt="" coords="1657,11,2073,192"/>
-<area shape="rect" id="node5" href="./WebSecurityConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="1647,5,2084,197"/>
-<area shape="rect" id="node6_5" href="./ApplicationConfigSecurity.html" title="cn.home1.cloud.config.server.security.ApplicationConfigSecurity" alt="" coords="2119,54,2539,149"/>
-<area shape="rect" id="node6" href="./ApplicationConfigSecurity.html" title="&lt;TABLE&gt;" alt="" coords="2109,49,2550,154"/>
+<area shape="rect" id="node4_3" href="./PrivilegedUserProperties.html" title="cn.home1.cloud.config.server.security.PrivilegedUserProperties" alt="" coords="1387,63,1573,140"/>
+<area shape="rect" id="node4" href="./PrivilegedUserProperties.html" title="&lt;TABLE&gt;" alt="" coords="1377,57,1583,145"/>
+<area shape="rect" id="node5_4" href="./WebSecurityConfiguration.html" title="cn.home1.cloud.config.server.security.WebSecurityConfiguration" alt="" coords="1619,11,1971,192"/>
+<area shape="rect" id="node5" href="./WebSecurityConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="1608,5,1981,197"/>
+<area shape="rect" id="node6_5" href="./ApplicationConfigSecurity.html" title="cn.home1.cloud.config.server.security.ApplicationConfigSecurity" alt="" coords="2017,54,2490,149"/>
+<area shape="rect" id="node6" href="./ApplicationConfigSecurity.html" title="&lt;TABLE&gt;" alt="" coords="2006,49,2501,154"/>
 </map>

@@ -19,7 +19,7 @@ digraph G {
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + ApplicationConfigSecurity() </td></tr>
-<tr><td align="left" balign="left"> + checkAuthenticationName(pathRepositoryName : String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + checkAuthentication(pathApplication : String, pathProfiles : String) : boolean </td></tr>
 		</table></td></tr>
 		</table>>, URL="./ApplicationConfigSecurity.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
