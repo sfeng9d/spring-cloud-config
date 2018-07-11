@@ -120,10 +120,10 @@
 <h2><a name="I._Repository_locations"></a>I. Repository locations</h2>
 <div class="section">
 <h3><a name="a1.Global_config_repository_for_all_projects_of_organization"></a>1.Global config repository for all projects of organization</h3>
-<p>git@{git-service}:spring-cloud-config-server/{organization}-global-config.git</p></div>
+<p>git@${git-service}:spring-cloud-config-server/${organization}-global-config.git</p></div>
 <div class="section">
 <h3><a name="a2.Project_config_repositories"></a>2.Project config repositories</h3>
-<p>git@{git-service}:spring-cloud-config-server/{project}-config.git</p></div></div>
+<p>git@${git-service}:spring-cloud-config-server/${spring.application.name}-config.git</p></div></div>
 <div class="section">
 <h2><a name="II._Branch_model"></a>II. Branch model</h2>
 <p>We use GitFlow to control global/project config versions in develop, staging and production environments</p>
@@ -131,134 +131,191 @@
 <thead>
 
 <tr class="a">
-<th>Environment    </th>
+<th> Environment    </th>
 <th> config-server         </th>
-<th> Global config label (Branch/Tag)                  </th>
+<th> Global config label (Branch/Tag)                   </th>
 <th> project               </th>
-<th> Project config label (default)</th></tr>
+<th> Project config label (default)                            </th></tr>
 </thead><tbody>
 
 <tr class="b">
-<td>develop.env    </td>
-<td> on develop machine    </td>
-<td> branch feature/{feature} during develop           </td>
+<td>                </td>
+<td>                       </td>
+<td>                                                    </td>
 <td>                       </td>
 <td>                                                           </td></tr>
 <tr class="a">
+<td>                </td>
+<td>                       </td>
+<td> Config at specific (child) project&#x2019;s config file   </td>
+<td>                       </td>
+<td> Default value is on config-server&#x2019;s                       </td></tr>
+<tr class="b">
+<td>                </td>
+<td>                       </td>
+<td> <tt>spring.cloud.config.parent.label</tt>                 </td>
+<td>                       </td>
+<td> <tt>spring.cloud.config.server.default-label</tt>                </td></tr>
+<tr class="a">
+<td>                </td>
+<td>                       </td>
+<td>                                                    </td>
+<td>                       </td>
+<td> Can be overrode by specific (child) project&#x2019;s             </td></tr>
+<tr class="b">
+<td>                </td>
+<td>                       </td>
+<td>                                                    </td>
+<td>                       </td>
+<td> <tt>spring.cloud.config.label</tt>                               </td></tr>
+<tr class="a">
+<td>                </td>
+<td>                       </td>
+<td>                                                    </td>
+<td>                       </td>
+<td>                                                           </td></tr>
+<tr class="b">
+<td> develop.env    </td>
+<td> on develop machine    </td>
+<td> branch feature/{feature} during develop            </td>
+<td>                       </td>
+<td>                                                           </td></tr>
+<tr class="a">
+<td>                </td>
 <td> in office LAN         </td>
-<td> branch develop available for project developers   </td>
+<td> branch develop available for project developers    </td>
 <td> on developer hosts    </td>
 <td> branch feature/{feature} during feature development       </td></tr>
 <tr class="b">
+<td>                </td>
 <td> in office LAN         </td>
-<td> branch develop available for project developers   </td>
+<td> branch develop available for project developers    </td>
 <td> on developer hosts    </td>
 <td> branch develop when feature merged                        </td></tr>
 <tr class="a">
+<td>                </td>
 <td>                       </td>
-<td>                                                   </td>
+<td>                                                    </td>
 <td> on CI slave/runner    </td>
 <td> branch develop on CI build and publish snapshots          </td></tr>
 <tr class="b">
+<td>                </td>
 <td>                       </td>
-<td>                                                   </td>
+<td>                                                    </td>
 <td>                       </td>
 <td>                                                           </td></tr>
 <tr class="a">
-<td>staging.env    </td>
+<td> staging.env    </td>
 <td> in staging cluster    </td>
-<td> branch release/{version} during pre-release tests </td>
+<td> branch release/{version} during pre-release tests  </td>
 <td>                       </td>
 <td>                                                           </td></tr>
 <tr class="b">
+<td>                </td>
 <td> in staging cluster    </td>
-<td> branch master or tag v{version} after released    </td>
+<td> branch master or tag v{version} after released     </td>
 <td> on CI slave/runner    </td>
 <td> branch release/{version} on CI build and publish releases </td></tr>
 <tr class="a">
+<td>                </td>
 <td>                       </td>
-<td>                                                   </td>
+<td>                                                    </td>
 <td> in staging cluster    </td>
 <td> branch master or tag v{version} after released            </td></tr>
 <tr class="b">
+<td>                </td>
 <td>                       </td>
-<td>                                                   </td>
+<td>                                                    </td>
 <td>                       </td>
 <td>                                                           </td></tr>
 <tr class="a">
-<td>production.env </td>
+<td> production.env </td>
 <td> in production cluster </td>
-<td> branch master or tag v{version} after released    </td>
+<td> branch production or tag v{version} after released </td>
 <td> in production cluster </td>
-<td> branch master or tag v{version} after released            </td></tr>
+<td> branch production or tag v{version} after released        </td></tr>
 </tbody>
 </table></div>
 <div class="section">
-<h2><a name="III._Config_repository_security.2C_keystore.2C_password_management"></a>III. Config repository security, keystore, password management</h2>
+<h2><a name="III._Config_repository_security.2C_password_management"></a>III. Config repository security, password management</h2>
 <table border="0" class="table table-striped">
 <thead>
 
 <tr class="a">
-<th>Environment    </th>
-<th> config-server         </th>
-<th> Global config label (Branch/Tag)                  </th>
-<th> project               </th>
-<th> Project config label (default)</th></tr>
+<th> Environment    </th>
+<th> project config repo&#x2019;s password                                                               </th></tr>
 </thead><tbody>
 
 <tr class="b">
-<td>develop.env    </td>
-<td> on develop machine    </td>
-<td> branch feature/{feature} during develop           </td>
-<td>                       </td>
-<td>                                                           </td></tr>
+<td>                </td>
+<td>                                                                                              </td></tr>
 <tr class="a">
-<td> in office LAN         </td>
-<td> branch develop available for project developers   </td>
-<td> on developer hosts    </td>
-<td> branch feature/{feature} during feature development       </td></tr>
+<td> develop.env    </td>
+<td> ${spring.application.name}-config/auth-label-develop/${spring.application.name}.yml          </td></tr>
 <tr class="b">
-<td> in office LAN         </td>
-<td> branch develop available for project developers   </td>
-<td> on developer hosts    </td>
-<td> branch develop when feature merged                        </td></tr>
+<td>                </td>
+<td> <tt>spring.cloud.config.password</tt> plain text or encrypted by key for develop.env                </td></tr>
 <tr class="a">
-<td>                       </td>
-<td>                                                   </td>
-<td> on CI slave/runner    </td>
-<td> branch develop on CI build and publish snapshots          </td></tr>
+<td>                </td>
+<td>                                                                                              </td></tr>
 <tr class="b">
-<td>                       </td>
-<td>                                                   </td>
-<td>                       </td>
-<td>                                                           </td></tr>
+<td> staging.env    </td>
+<td> ${spring.application.name}-config/auth-profile-staging.env/${spring.application.name}.yml    </td></tr>
 <tr class="a">
-<td>staging.env    </td>
-<td> in staging cluster    </td>
-<td> branch release/{version} during pre-release tests </td>
-<td>                       </td>
-<td>                                                           </td></tr>
+<td>                </td>
+<td> <tt>spring.cloud.config.password</tt> encrypted by key for staging.env                              </td></tr>
 <tr class="b">
-<td> in staging cluster    </td>
-<td> branch master or tag v{version} after released    </td>
-<td> on CI slave/runner    </td>
-<td> branch release/{version} on CI build and publish releases </td></tr>
+<td>                </td>
+<td>                                                                                              </td></tr>
 <tr class="a">
-<td>                       </td>
-<td>                                                   </td>
-<td> in staging cluster    </td>
-<td> branch master or tag v{version} after released            </td></tr>
+<td> production.env </td>
+<td> ${spring.application.name}-config/auth-profile-production.env/${spring.application.name}.yml </td></tr>
 <tr class="b">
-<td>                       </td>
-<td>                                                   </td>
-<td>                       </td>
-<td>                                                           </td></tr>
+<td>                </td>
+<td> <tt>spring.cloud.config.password</tt> encrypted by key for production.env                           </td></tr>
 <tr class="a">
-<td>production.env </td>
-<td> in production cluster </td>
-<td> branch master or tag v{version} after released    </td>
-<td> in production cluster </td>
-<td> branch master or tag v{version} after released            </td></tr>
+<td>                </td>
+<td>                                                                                              </td></tr>
+</tbody>
+</table>
+<table border="0" class="table table-striped">
+<thead>
+
+<tr class="a">
+<th> Environment    </th>
+<th> Global config repo&#x2019;s password                                                              </th></tr>
+</thead><tbody>
+
+<tr class="b">
+<td>                </td>
+<td>                                                                                            </td></tr>
+<tr class="a">
+<td> develop.env    </td>
+<td> ${organization}-global-config/auth-label-develop/application.yml                           </td></tr>
+<tr class="b">
+<td>                </td>
+<td> <tt>spring.cloud.config.password</tt> encrypted by key for develop.env                            </td></tr>
+<tr class="a">
+<td>                </td>
+<td>                                                                                            </td></tr>
+<tr class="b">
+<td> staging.env    </td>
+<td> ${organization}-global-config/auth-profile-staging.env/application.yml                     </td></tr>
+<tr class="a">
+<td>                </td>
+<td> <tt>spring.cloud.config.password</tt> encrypted by key for staging.env                            </td></tr>
+<tr class="b">
+<td>                </td>
+<td>                                                                                            </td></tr>
+<tr class="a">
+<td> production.env </td>
+<td> ${organization}-global-config/auth-profile-production.env/application.yml                  </td></tr>
+<tr class="b">
+<td>                </td>
+<td> <tt>spring.cloud.config.password</tt> encrypted by key for production.env                         </td></tr>
+<tr class="a">
+<td>                </td>
+<td>                                                                                            </td></tr>
 </tbody>
 </table></div>
         </div>
