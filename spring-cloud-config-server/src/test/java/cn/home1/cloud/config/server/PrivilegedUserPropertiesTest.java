@@ -13,10 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -66,9 +66,12 @@ public class PrivilegedUserPropertiesTest {
     this.host = "http://localhost:" + port;
     log.info(host);
 
-    firstAppAuthHttpEntity = structHttpEntityWithAuthHeaders(firstAppName, firstAppPassword);
+    this.firstAppAuthHttpEntity = structHttpEntityWithAuthHeaders(this.firstAppName, this.firstAppPassword);
 
-    adminAuthHttpEntity = structHttpEntityWithAuthHeaders(privilegedUserProperties.getAdminName(), privilegedUserProperties.getAdminPassword());
+    this.adminAuthHttpEntity = structHttpEntityWithAuthHeaders( //
+        this.privilegedUserProperties.getAdminName(),
+        this.privilegedUserProperties.getAdminPassword()
+    );
   }
 
   private <T> HttpEntity<T> structHttpEntityWithAuthHeaders(final String name, final String password) {

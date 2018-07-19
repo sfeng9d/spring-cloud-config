@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.config.server.environment.EnvironmentRepository;
+import org.springframework.cloud.config.server.environment.MultipleJGitEnvironmentProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -16,9 +17,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @ConditionalOnMissingBean(EnvironmentRepository.class)
 @Configuration
 public class GitParentSupportConfiguration {
-
-  @Autowired
-  private ConfigSecurity configSecurity;
 
   @Value("${spring.cloud.config.server.default-label:master}")
   private String defaultLabel;
@@ -42,12 +40,17 @@ public class GitParentSupportConfiguration {
   private TransportConfigCallback transportConfigCallback;
 
   @Bean
-  @ConditionalOnMissingBean(EnvironmentRepository.class)
-  public EnvironmentRepository environmentRepository() {
-    final GitParentSupportMultipleJGitEnvironmentRepository repository =
-        new GitParentSupportMultipleJGitEnvironmentRepository(this.environment);
+  public ConfigSecurity configSecurity() {
+    return new ConfigSecurity();
+  }
 
-    repository.setConfigSecurity(this.configSecurity);
+  @Bean
+  @ConditionalOnMissingBean(EnvironmentRepository.class)
+  public EnvironmentRepository environmentRepository(final MultipleJGitEnvironmentProperties environmentProperties) {
+    final GitParentSupportMultipleJGitEnvironmentRepository repository =
+        new GitParentSupportMultipleJGitEnvironmentRepository(this.environment, environmentProperties);
+
+    repository.setConfigSecurity(this.configSecurity());
 
     repository.setDefaultLabel(this.defaultLabel);
     repository.setDeleteUntrackedBranches(this.deleteUntrackedBranches);
