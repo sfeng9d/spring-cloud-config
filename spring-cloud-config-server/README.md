@@ -184,10 +184,10 @@ spring.cloud:
 config-server's application.yml example:
 ```yaml
 security:
-  basic.enabled: ${SECURITY_BASIC_ENABLED:true}
+  basic.enabled: ${SPRING_SECURITY_ENABLED:true}
   hook:
-    name: ${SECURITY_HOOK_NAME:hook}
-    password: ${SECURITY_HOOK_PASSWORD:hook_pass}
+    name: ${SPRING_SECURITY_HOOK_NAME:hook}
+    password: ${SPRING_SECURITY_HOOK_PASSWORD:hook_pass}
 ```
 
 

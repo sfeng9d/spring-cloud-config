@@ -30,10 +30,9 @@ services:
     - GIT_PREFIX=${GIT_PREFIX:-https://github.com:443/spring-cloud-config-server}
     #- GIT_PREFIX=${GIT_PREFIX:-ssh://git@github.com:22/spring-cloud-config-server}
 
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-admin_pass}
-    - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-config-server}
     - SERVER_PORT=${SERVER_PORT:-8888}
 
+    - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-config-server}
     - SPRING_CLOUD_CLIENT_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME:-config-server}
     #- SPRING_CLOUD_CLIENT_IPADDRESS=${SPRING_CLOUD_CLIENT_IPADDRESS}
 
@@ -54,6 +53,7 @@ services:
     - SPRING_CLOUD_CONSUL_PORT=${SPRING_CLOUD_CONSUL_PORT:-8500}
 
     - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-development.env,port_nonsecure}
+    - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-admin_pass}
 
     # monitor/rabbitmq
     - SPRING_RABBITMQ_HOST=${SPRING_RABBITMQ_HOST:-} # changeme
