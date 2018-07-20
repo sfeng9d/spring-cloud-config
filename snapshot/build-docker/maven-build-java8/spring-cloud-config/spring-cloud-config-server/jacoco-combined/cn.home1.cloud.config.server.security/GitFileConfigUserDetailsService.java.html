@@ -4,6 +4,7 @@ import static cn.home1.cloud.config.server.util.Consts.DOT_ENV;
 import static cn.home1.cloud.config.server.util.Consts.PRIVILEGE_ENV_PROFILE_;
 import static cn.home1.cloud.config.server.util.Consts.PRIVILEGE_ENV_PROFILE_WILDCARD;
 import static cn.home1.cloud.config.server.util.EnvironmentUtils.getConfigPassword;
+import static java.util.stream.Collectors.toList;
 
 import com.google.common.collect.ImmutableList;
 
@@ -28,46 +29,45 @@ import java.util.regex.Pattern;
 /**
  * config-server-client use the password configured in GIT. the user name must be the app name.
  */
-<span class="nc" id="L31">@Slf4j</span>
-<span class="nc" id="L32">public class GitFileConfigUserDetailsService implements UserDetailsService {</span>
+<span class="nc" id="L32">@Slf4j</span>
+<span class="nc" id="L33">public class GitFileConfigUserDetailsService implements UserDetailsService {</span>
 
-<span class="nc" id="L34">  private static final Pattern PATTERN_AT = Pattern.compile(&quot;@&quot;);</span>
+<span class="nc" id="L35">  private static final Pattern PATTERN_AT = Pattern.compile(&quot;@&quot;);</span>
 
-<span class="nc" id="L36">  private static final Collection&lt;? extends GrantedAuthority&gt; ANONYMOUS_AUTHORITY = ImmutableList.of();</span>
+<span class="nc" id="L37">  private static final Collection&lt;? extends GrantedAuthority&gt; ANONYMOUS_AUTHORITY = ImmutableList.of();</span>
 
-<span class="nc" id="L38">  private static final Collection&lt;? extends GrantedAuthority&gt; ADMIN_AUTHORITY =</span>
-<span class="nc" id="L39">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.ADMIN.toString()));</span>
+<span class="nc" id="L39">  private static final Collection&lt;? extends GrantedAuthority&gt; HOOK_AUTHORITY =</span>
+<span class="nc" id="L40">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.HOOK.toString()));</span>
 
-<span class="nc" id="L41">  private static final Collection&lt;? extends GrantedAuthority&gt; HOOK_AUTHORITY =</span>
-<span class="nc" id="L42">      ImmutableList.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + Role.HOOK.toString()));</span>
+<span class="nc" id="L42">  private static final GrantedAuthority USER_AUTHORITY = new SimpleGrantedAuthority( //</span>
+<span class="nc" id="L43">      &quot;ROLE_&quot; + Role.USER.toString());</span>
 
-<span class="nc" id="L44">  private static final GrantedAuthority USER_AUTHORITY = new SimpleGrantedAuthority( //</span>
-<span class="nc" id="L45">      &quot;ROLE_&quot; + Role.USER.toString());</span>
-
-<span class="nc" id="L47">  @Setter</span>
+<span class="nc" id="L45">  @Setter</span>
   private ConfigSecurity configSecurity;
 
-<span class="nc" id="L50">  @Setter</span>
+<span class="nc" id="L48">  @Setter</span>
   private String defaultLabel;
 
-<span class="nc" id="L53">  @Setter</span>
+<span class="nc" id="L51">  @Setter</span>
   private EnvironmentController environmentController;
 
-<span class="nc" id="L56">  @Setter</span>
-  private PrivilegedUserProperties PrivilegedUserProperties;
+<span class="nc" id="L54">  @Setter</span>
+  private PrivilegedUserProperties privilegedUserProperties;
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-<span class="nc bnc" id="L61" title="All 2 branches missed.">    if (username == null) {</span>
-<span class="nc" id="L62">      return new User(&quot;anonymous&quot;, &quot;&quot;, ANONYMOUS_AUTHORITY);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">    if (username == null) {</span>
+<span class="nc" id="L60">      return new User(&quot;anonymous&quot;, &quot;&quot;, ANONYMOUS_AUTHORITY);</span>
     }
 
-<span class="nc bnc" id="L65" title="All 2 branches missed.">    if (username.equals(this.PrivilegedUserProperties.getAdminName())) {</span>
-<span class="nc" id="L66">      return new User(username, this.PrivilegedUserProperties.getAdminPassword(), ADMIN_AUTHORITY);</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">    if (username.equals(this.privilegedUserProperties.getAdminName())) {</span>
+<span class="nc" id="L64">      final Collection&lt;? extends GrantedAuthority&gt; adminAuthority = this.privilegedUserProperties.getAdminRoles() //</span>
+<span class="nc" id="L65">          .stream().map(role -&gt; new SimpleGrantedAuthority(&quot;ROLE_&quot; + role)).collect(toList());</span>
+<span class="nc" id="L66">      return new User(username, this.privilegedUserProperties.getAdminPassword(), adminAuthority);</span>
     }
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">    if (username.equals(this.PrivilegedUserProperties.getHookName())) {</span>
-<span class="nc" id="L70">      return new User(username, this.PrivilegedUserProperties.getHookPassword(), HOOK_AUTHORITY);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">    if (username.equals(this.privilegedUserProperties.getHookName())) {</span>
+<span class="nc" id="L70">      return new User(username, this.privilegedUserProperties.getHookPassword(), HOOK_AUTHORITY);</span>
     }
 
     // username is `spring.application.name` or `spring.application.name@{profile.env}`

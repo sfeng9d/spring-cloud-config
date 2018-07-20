@@ -19,12 +19,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.cloud.config.server.config.ConfigServerHealthIndicator;
-import org.springframework.cloud.config.server.config.TransportConfiguration;
 import org.springframework.cloud.config.server.environment.EnvironmentRepository;
-import org.springframework.cloud.config.server.ssh.SshUriProperties;
+import org.springframework.cloud.config.server.environment.MultipleJGitEnvironmentProperties;
+import org.springframework.cloud.config.server.ssh.FileBasedSshTransportConfigCallback;
+import org.springframework.cloud.config.server.ssh.PropertiesBasedSshTransportConfigCallback;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -42,75 +44,70 @@ import java.io.File;
  * see: {@link org.springframework.cloud.config.server.config.ConfigServerMvcConfiguration}
  */
 @RestController
-@SpringBootApplication
-<span class="nc" id="L46">@Slf4j</span>
-<span class="nc" id="L47">public class ConfigServer {</span>
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+<span class="nc" id="L48">@Slf4j</span>
+<span class="nc" id="L49">public class ConfigServer {</span>
 
   private static final DeployKey DEPLOY_KEY;
 
   static {
     // set default profiles
-<span class="nc" id="L53">    final String profilesFromEnv = System.getenv(&quot;SPRING_PROFILES_ACTIVE&quot;);</span>
-<span class="nc" id="L54">    final String profilesFromProperty = System.getProperty(&quot;spring.profiles.active&quot;, &quot;&quot;);</span>
-<span class="nc bnc" id="L55" title="All 4 branches missed.">    if (isBlank(profilesFromEnv) &amp;&amp; isBlank(profilesFromProperty)) {</span>
-<span class="nc" id="L56">      System.setProperty(&quot;spring.profiles.active&quot;, &quot;port_nonsecure&quot;);</span>
+<span class="nc" id="L55">    final String profilesFromEnv = System.getenv(&quot;SPRING_PROFILES_ACTIVE&quot;);</span>
+<span class="nc" id="L56">    final String profilesFromProperty = System.getProperty(&quot;spring.profiles.active&quot;, &quot;&quot;);</span>
+<span class="nc bnc" id="L57" title="All 4 branches missed.">    if (isBlank(profilesFromEnv) &amp;&amp; isBlank(profilesFromProperty)) {</span>
+<span class="nc" id="L58">      System.setProperty(&quot;spring.profiles.active&quot;, &quot;port_nonsecure&quot;);</span>
     }
 
     // set deploy key
-<span class="nc" id="L60">    final String deployKeyFromEnv = System.getenv(&quot;SPRING_CLOUD_CONFIG_SERVER_GIT_DEPLOYKEY&quot;);</span>
-<span class="nc" id="L61">    final String deployKeyFromProperty = System.getProperty(&quot;spring.cloud.config.server.git.deploy-key&quot;, &quot;&quot;);</span>
+<span class="nc" id="L62">    final String deployKeyFromEnv = System.getenv(&quot;SPRING_CLOUD_CONFIG_SERVER_GIT_DEPLOYKEY&quot;);</span>
+<span class="nc" id="L63">    final String deployKeyFromProperty = System.getProperty(&quot;spring.cloud.config.server.git.deploy-key&quot;, &quot;&quot;);</span>
     final String deployKeyLocation;
-<span class="nc bnc" id="L63" title="All 2 branches missed.">    if (isNotBlank(deployKeyFromEnv)) {</span>
-<span class="nc" id="L64">      deployKeyLocation = deployKeyFromEnv;</span>
-<span class="nc bnc" id="L65" title="All 2 branches missed.">    } else if (isNotBlank(deployKeyFromProperty)) {</span>
-<span class="nc" id="L66">      deployKeyLocation = deployKeyFromProperty;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">    if (isNotBlank(deployKeyFromEnv)) {</span>
+<span class="nc" id="L66">      deployKeyLocation = deployKeyFromEnv;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">    } else if (isNotBlank(deployKeyFromProperty)) {</span>
+<span class="nc" id="L68">      deployKeyLocation = deployKeyFromProperty;</span>
     } else {
-<span class="nc" id="L68">      deployKeyLocation = System.getProperty(&quot;user.home&quot;) + &quot;/.ssh/id_rsa&quot;;</span>
+<span class="nc" id="L70">      deployKeyLocation = System.getProperty(&quot;user.home&quot;) + &quot;/.ssh/id_rsa&quot;;</span>
     }
 
-<span class="nc" id="L71">    final File deployKeyFile = new File(DeployKey.getPrivateKeyPath(deployKeyLocation));</span>
-<span class="nc bnc" id="L72" title="All 4 branches missed.">    if (deployKeyFile.exists() &amp;&amp; deployKeyFile.canRead()) {</span>
-<span class="nc" id="L73">      DEPLOY_KEY = new DeployKey(deployKeyLocation);</span>
-<span class="nc" id="L74">      DEPLOY_KEY.setUp(null);</span>
+<span class="nc" id="L73">    final File deployKeyFile = new File(DeployKey.getPrivateKeyPath(deployKeyLocation));</span>
+<span class="nc bnc" id="L74" title="All 4 branches missed.">    if (deployKeyFile.exists() &amp;&amp; deployKeyFile.canRead()) {</span>
+<span class="nc" id="L75">      DEPLOY_KEY = new DeployKey(deployKeyLocation);</span>
+<span class="nc" id="L76">      DEPLOY_KEY.setUp(null);</span>
     } else {
-<span class="nc" id="L76">      DEPLOY_KEY = null;</span>
+<span class="nc" id="L78">      DEPLOY_KEY = null;</span>
     }
-<span class="nc" id="L78">  }</span>
+<span class="nc" id="L80">  }</span>
 
   @Configuration
   @EnableAutoConfiguration
   @EnableConfigServer
   //@EnableEurekaClient
   @EnableDiscoveryClient
-<span class="nc" id="L85">  protected class ConfigServerConfiguration {</span>
-
-    @Bean
-    public ConfigSecurity configSecurity() {
-<span class="nc" id="L89">      return new ConfigSecurity();</span>
-    }
+<span class="nc" id="L87">  protected class ConfigServerConfiguration {</span>
 
     /**
-     * see: {@link org.springframework.cloud.config.server.config.TransportConfiguration}
+     * see: {@link org.springframework.cloud.config.server.environment.MultipleJGitEnvironmentRepositoryFactory}
      */
     @ConditionalOnMissingBean(TransportConfigCallback.class)
     @Bean
-    public TransportConfigCallback propertiesBasedSshTransportCallback(final SshUriProperties sshUriProperties) {
-<span class="nc bnc" id="L98" title="All 2 branches missed.">      if (ConfigServer.DEPLOY_KEY != null) {</span>
-<span class="nc" id="L99">        DEPLOY_KEY.setUp(sshUriProperties);</span>
-<span class="nc" id="L100">        return new TransportConfiguration.PropertiesBasedSshTransportConfigCallback(sshUriProperties);</span>
+    public TransportConfigCallback propertiesBasedSshTransportCallback(final MultipleJGitEnvironmentProperties sshUriProperties) {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">      if (ConfigServer.DEPLOY_KEY != null) {</span>
+<span class="nc" id="L96">        DEPLOY_KEY.setUp(sshUriProperties);</span>
+<span class="nc" id="L97">        return new PropertiesBasedSshTransportConfigCallback(sshUriProperties);</span>
       } else {
-<span class="nc" id="L102">        return new TransportConfiguration.FileBasedSshTransportConfigCallback(sshUriProperties);</span>
+<span class="nc" id="L99">        return new FileBasedSshTransportConfigCallback(sshUriProperties);</span>
       }
     }
   }
 
   @Configuration
-<span class="nc" id="L108">  public static class HealthIndicatorConfiguration {</span>
+<span class="nc" id="L105">  public static class HealthIndicatorConfiguration {</span>
 
     @Bean
     @ConditionalOnProperty(value = &quot;spring.cloud.config.server.health.enabled&quot;, matchIfMissing = true)
     public ConfigServerHealthIndicator configServerHealthIndicator(final EnvironmentRepository repository) {
-<span class="nc" id="L113">      return new ConfigServerHealthIndicator(repository);</span>
+<span class="nc" id="L110">      return new ConfigServerHealthIndicator(repository);</span>
     }
   }
 
@@ -123,22 +120,22 @@ import java.io.File;
   @ResponseBody
   @RequestMapping(path = {&quot;/&quot;, &quot;${spring.cloud.config.server.prefix:}/&quot;}, method = GET)
   public String index() {
-<span class="nc" id="L126">    return &quot;Visit https://github.com/cloud-ready/spring-cloud-config-server for more info.&quot;;</span>
+<span class="nc" id="L123">    return &quot;Visit https://github.com/cloud-ready/spring-cloud-config-server for more info.&quot;;</span>
   }
 
   @ResponseBody
   @RequestMapping(path = &quot;${spring.cloud.config.server.prefix:}/deployKeyPublic&quot;, method = GET)
   public ResponseEntity&lt;String&gt; getDeployKeyPublic() {
     final ResponseEntity&lt;String&gt; responseEntity;
-<span class="nc bnc" id="L133" title="All 2 branches missed.">    if (ConfigServer.DEPLOY_KEY != null) {</span>
-<span class="nc" id="L134">      responseEntity = new ResponseEntity&lt;&gt;(ConfigServer.DEPLOY_KEY.getPublicKey(), HttpStatus.OK);</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">    if (ConfigServer.DEPLOY_KEY != null) {</span>
+<span class="nc" id="L131">      responseEntity = new ResponseEntity&lt;&gt;(ConfigServer.DEPLOY_KEY.getPublicKey(), HttpStatus.OK);</span>
     } else {
-<span class="nc" id="L136">      responseEntity = new ResponseEntity&lt;&gt;(&quot;&quot;, HttpStatus.NOT_FOUND);</span>
+<span class="nc" id="L133">      responseEntity = new ResponseEntity&lt;&gt;(&quot;&quot;, HttpStatus.NOT_FOUND);</span>
     }
-<span class="nc" id="L138">    return responseEntity;</span>
+<span class="nc" id="L135">    return responseEntity;</span>
   }
 
-<span class="nc" id="L141">  @SneakyThrows</span>
+<span class="nc" id="L138">  @SneakyThrows</span>
   @ResponseBody
   @RequestMapping(path = &quot;${spring.cloud.config.server.prefix:}/encryptParentPassword&quot;, method = POST,
       consumes = APPLICATION_FORM_URLENCODED_VALUE)
@@ -147,11 +144,11 @@ import java.io.File;
       @RequestParam(&quot;parentApplication&quot;) final String parentApplication,
       @RequestParam(&quot;parentPassword&quot;) final String parentPassword
   ) {
-<span class="nc" id="L150">    return this.configSecurity.encryptParentPassword(application, parentApplication, parentPassword);</span>
+<span class="nc" id="L147">    return this.configSecurity.encryptParentPassword(application, parentApplication, parentPassword);</span>
   }
 
   public static void main(final String... args) {
-<span class="nc" id="L154">    SpringApplication.run(ConfigServer.class, args);</span>
-<span class="nc" id="L155">  }</span>
+<span class="nc" id="L151">    SpringApplication.run(ConfigServer.class, args);</span>
+<span class="nc" id="L152">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>
